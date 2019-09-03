@@ -10,6 +10,7 @@ import { MatInputModule, MatCardModule, MatButtonModule, MatToolbarModule, MatEx
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './post-list/post-list.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

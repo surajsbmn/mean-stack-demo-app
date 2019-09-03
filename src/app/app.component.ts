@@ -10,9 +10,9 @@ import { Post } from '../models/post.model';
 export class AppComponent {
   title = 'Mean Stack Demo Project';
 
-  storedPosts: Post[] = [];
+  //storedPosts: Post[] = [];
 
-  onPostsAdded(post: Post) {
-    this.storedPosts.push(post);
-  }
+  // onPostsAdded(post: Post) {
+  //   this.storedPosts.push(post);
+  // }
 }
