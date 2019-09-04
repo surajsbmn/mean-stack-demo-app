@@ -7,19 +7,20 @@ import { Post } from '../models/post.model';
   providedIn: 'root'
 })
 export class PostsService {
+
   private posts: Post[] = [];
+  // postUpdated of type Subject of array of Post (Observable)
   private postsUpdated = new Subject<Post[]>();
 
   constructor() { }
 
-
+  // return subject as an observable
   getPostUpdateListener() {
     return this.postsUpdated.asObservable();
   }
 
   getPosts() {
     return [...this.posts];
-    // return this.posts;
   }
 
   addPost(title: string, content: string) {
@@ -28,7 +29,11 @@ export class PostsService {
       content: content
     };
 
+    // Add new post to the array
     this.posts.push(post);
+
+    // call next on subject and pass by value the post array
     this.postsUpdated.next([...this.posts]);
+
   }
 }
