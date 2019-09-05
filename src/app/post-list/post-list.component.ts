@@ -12,7 +12,8 @@ import { PostsService } from '../posts.service';
 export class PostListComponent implements OnInit, OnDestroy {
 
   // Posts array
-  posts: Post[] = [];
+   posts: Post[] = [];
+
   // post Subscription object
   private postsSub: Subscription;
 
@@ -20,7 +21,8 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // call getPosts() from PostsService when component loads
-    this.posts = this.postsService.getPosts();
+   // this.posts = this.postsService.getPosts();
+    this.postsService.getPosts();
 
     // Subscribe to getPostUpdateListener() which returns observable
     this.postsSub = this.postsService.getPostUpdateListener()

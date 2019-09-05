@@ -1,11 +1,13 @@
-# MyApp
+# MEAN Stack Demo App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.0.
+To install the project run `npm install`
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+Also run `npm run start:server` for running the node backend. Default port is '5200'.
+ 
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
