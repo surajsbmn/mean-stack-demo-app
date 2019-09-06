@@ -7,7 +7,13 @@ To install the project run `npm install`
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 Also run `npm run start:server` for running the node backend. Default port is '5200'.
- 
+
+
+## MongoDB Setup
+
+MongoDb is configured on localhost with connection string as `mongodb://localhost:27017/meanapp`.
+the DB name is meanapp, you can change according to your configuration.
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
