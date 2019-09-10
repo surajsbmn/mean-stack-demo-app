@@ -13,7 +13,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   // Posts array
    posts: Post[] = [];
-
+  isLoading = false;
   // post Subscription object
   private postsSub: Subscription;
 
@@ -22,11 +22,14 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // call getPosts() from PostsService when component loads
    // this.posts = this.postsService.getPosts();
+
+    this.isLoading = true;
     this.postsService.getPosts();
 
     // Subscribe to getPostUpdateListener() which returns observable
     this.postsSub = this.postsService.getPostUpdateListener()
     .subscribe((posts: Post[]) => {
+      this.isLoading = false;
       this.posts = posts;
     });
   }

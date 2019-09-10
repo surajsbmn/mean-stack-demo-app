@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { Post } from '../models/post.model';
 import { HttpClient } from '@angular/common/http';
-
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class PostsService {
   // postUpdated of type Subject of array of Post (Observable)
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // return subject as an observable
   getPostUpdateListener() {
@@ -43,7 +43,7 @@ export class PostsService {
 
   getPost(id: string) {
     // return {...this.posts.find(post => post.id === id)};
-    return this.http.get<{_id: string, title: string, content: string}>('http://localhost:5200/api/posts/' + id);
+    return this.http.get<{ _id: string, title: string, content: string }>('http://localhost:5200/api/posts/' + id);
   }
 
 
@@ -66,20 +66,25 @@ export class PostsService {
 
         // call next on subject and pass by value the post array
         this.postsUpdated.next([...this.posts]);
+
+        this.router.navigate(['/']);
       });
   }
 
   updatePost(id: string, title: string, content: string) {
     const post: Post = { id: id, title: title, content: content };
     this.http.put('http://localhost:5200/api/posts/' + id, post)
-    .subscribe((response) => {
-     // console.log(response);
-     const updatedPosts = [...this.posts];
-     const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
-     updatedPosts[oldPostIndex] = post;
-     this.posts = updatedPosts;
-     this.postsUpdated.next([...this.posts]);
-    });
+      .subscribe((response) => {
+        // console.log(response);
+        const updatedPosts = [...this.posts];
+        const oldPostIndex = updatedPosts.findIndex(p => p.id === post.id);
+        updatedPosts[oldPostIndex] = post;
+        this.posts = updatedPosts;
+
+        this.postsUpdated.next([...this.posts]);
+
+        this.router.navigate(['/']);
+      });
   }
 
   deletePost(postId: string) {

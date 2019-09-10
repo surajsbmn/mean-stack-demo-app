@@ -1,18 +1,23 @@
 <mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <!-- #postform is local reference of the form of type NgForm , it is passed to the onAddPost() -->
-  <form (submit)="onSavePost(postForm)" #postForm="ngForm">
+  <form [formGroup]="form" (submit)="onSavePost()"  *ngIf="!isLoading">
 
     <mat-form-field>
-      <input matInput type="text" placeholder="Post Title" name="title" [ngModel]="post?.title" required minlength="3"
-        #title="ngModel" />
-      <mat-error *ngIf="title.invalid">Enter a valid post title! (minimum 3 characters)</mat-error>
+      <input formControlName="title" matInput type="text" placeholder="Post Title" name="title"/>
+      <mat-error *ngIf="form.get('title').invalid">Enter a valid post title! (minimum 3 characters)</mat-error>
     </mat-form-field>
-
+    <div>
+      <button mat-stroked-button type="button" (click)="filePicker.click()">Add Image</button>
+      <input type="file" #filePicker (change)="onImagePicked($event)">
+    </div>
+    <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview">
+      <img [src]="imagePreview" [alt]="form.value.title">
+    </div>
     <mat-form-field>
-      <textarea matInput rows="6" placeholder="Post Content" name="content" [ngModel]="post?.content" required maxlength="140"
-        #content="ngModel">
+      <textarea formControlName="content"matInput rows="6" placeholder="Post Content" name="content">
       </textarea>
-      <mat-error *ngIf="content.invalid">Enter valid content.(maximum 140 characters)</mat-error>
+      <mat-error *ngIf="form.get('content').invalid">Enter valid content.(maximum 140 characters)</mat-error>
     </mat-form-field>
 
     <button mat-raised-button type="submit" color="primary">POST</button>

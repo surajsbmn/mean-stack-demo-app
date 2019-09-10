@@ -1,6 +1,7 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
 <!-- multi="true" allow more than one post to be viewed at the same time -->
 <!-- Display post-list if its not empty -->
-<mat-accordion multi="true" *ngIf="posts.length > 0">
+<mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
 
   <!-- Iterate the array and get posts -->
   <mat-expansion-panel *ngFor="let post of posts">
@@ -21,4 +22,4 @@
 </mat-accordion>
 
 <!-- if no posts available show message -->
-<p class="info-text" *ngIf="posts.length <= 0">No Posts added yet!</p>
+<p class="info-text" *ngIf="posts.length <= 0 && !isLoading">No Posts added yet!</p>
