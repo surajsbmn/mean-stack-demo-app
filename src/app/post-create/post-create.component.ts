@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Post } from 'surajsbmn-meanapp/src/models/post.model';
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'app-post-create',
