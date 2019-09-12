@@ -47,18 +47,18 @@ export class PostsService {
   }
 
 
-  addPost(title: string, content: string) {
-    const post: Post = {
-      id: null,
-      title,
-      content
-    };
+  addPost(title: string, content: string, image: File) {
+
+    const postData = new FormData();
+    postData.append('title', title);
+    postData.append('content', content);
+    postData.append('image', image, title);
 
     this.http
-      .post<{ message: string, postId: string }>('http://localhost:5200/api/posts', post)
+      .post<{ message: string, postId: string }>('http://localhost:5200/api/posts', postData)
       .subscribe(responseData => {
-        console.log(responseData.message);
-
+        // console.log(responseData.message);
+        const post: Post = { id: responseData.postId, title: title, content: content };
         const id = responseData.postId;
         post.id = id;
         // Add new post to the array

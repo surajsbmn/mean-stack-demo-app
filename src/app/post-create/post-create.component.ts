@@ -4,6 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../models/post.model';
+import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -11,7 +12,6 @@ import { Post } from '../../models/post.model';
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent implements OnInit {
-
   enteredTitle = '';
   enteredContent = '';
   private mode = 'create';
@@ -22,27 +22,23 @@ export class PostCreateComponent implements OnInit {
   imagePreview: string;
 
   // Dependency injection (using public will automatically create the property)
-  constructor(public postsService: PostsService, public route: ActivatedRoute) { }
+  constructor(
+    public postsService: PostsService,
+    public route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-
     this.form = new FormGroup({
-      title: new FormControl(
-        null,
-        {
-          validators: [Validators.required, Validators.minLength(3)]
-        }
-      ),
-      content: new FormControl(
-        null,
-        {
-          validators: [Validators.required, Validators.minLength(3)]
-        }
-      ),
-      image: new FormControl(
-        null,
-        { validators: [Validators.required] }
-      )
+      title: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)]
+      }),
+      content: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)]
+      }),
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
+      })
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -51,16 +47,18 @@ export class PostCreateComponent implements OnInit {
         this.postId = paramMap.get('postId');
 
         this.isLoading = true;
-        this.postsService.getPost(this.postId)
-          .subscribe(postData => {
-            this.isLoading = false;
-            this.post = { id: postData._id, title: postData.title, content: postData.content };
-            this.form.setValue({
-              title: this.post.title,
-              content: this.post.content
-            });
+        this.postsService.getPost(this.postId).subscribe(postData => {
+          this.isLoading = false;
+          this.post = {
+            id: postData._id,
+            title: postData.title,
+            content: postData.content
+          };
+          this.form.setValue({
+            title: this.post.title,
+            content: this.post.content
           });
-
+        });
       } else {
         this.mode = 'create';
         this.postId = null;
@@ -71,7 +69,6 @@ export class PostCreateComponent implements OnInit {
 
   // Funtion to be called on addition of new post (getting form as a parameter of type NgForm)
   onSavePost() {
-
     // check if form is valid
     if (this.form.invalid) {
       return;
@@ -81,20 +78,26 @@ export class PostCreateComponent implements OnInit {
 
     if (this.mode === 'create') {
       // Pass the data to the PostsService
-      this.postsService.addPost(this.form.value.title, this.form.value.content);
+      this.postsService.addPost(
+        this.form.value.title,
+        this.form.value.content,
+        this.form.value.image
+      );
     } else {
-      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content);
+      this.postsService.updatePost(
+        this.postId,
+        this.form.value.title,
+        this.form.value.content
+      );
     }
 
     // clear and reset the fields of the form
     this.form.reset();
   }
 
-
   onImagePicked(event: Event) {
-
     const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({image: file});
+    this.form.patchValue({ image: file });
     this.form.get('image').updateValueAndValidity();
     console.log(file);
     console.log(this.form);
