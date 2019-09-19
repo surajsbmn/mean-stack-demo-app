@@ -5,6 +5,8 @@ import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../../models/post.model';
 import { mimeType } from './mime-type.validator';
+import { MatSnackBar } from '@angular/material';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-post-create',
@@ -24,7 +26,8 @@ export class PostCreateComponent implements OnInit {
   // Dependency injection (using public will automatically create the property)
   constructor(
     public postsService: PostsService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -52,17 +55,21 @@ export class PostCreateComponent implements OnInit {
           this.post = {
             id: postData._id,
             title: postData.title,
-            content: postData.content
+            content: postData.content,
+            imagePath: postData.imagePath
           };
           this.form.setValue({
             title: this.post.title,
-            content: this.post.content
+            content: this.post.content,
+            image: this.post.imagePath
           });
+          this.imagePreview = this.post.imagePath;
         });
+
       } else {
         this.mode = 'create';
         this.postId = null;
-        this.post = { id: null, title: '', content: '' };
+        this.post = { id: null, title: '', content: '', imagePath: null};
       }
     });
   }
@@ -71,13 +78,13 @@ export class PostCreateComponent implements OnInit {
   onSavePost() {
     // check if form is valid
     if (this.form.invalid) {
+      this._snackBar.open('Invalid File type!', 'OK', {duration: 2000, });
       return;
     }
 
     this.isLoading = true;
 
     if (this.mode === 'create') {
-      // Pass the data to the PostsService
       this.postsService.addPost(
         this.form.value.title,
         this.form.value.content,
@@ -87,11 +94,11 @@ export class PostCreateComponent implements OnInit {
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
-        this.form.value.content
+        this.form.value.content,
+        this.form.value.image
       );
     }
 
-    // clear and reset the fields of the form
     this.form.reset();
   }
 

@@ -13,7 +13,9 @@ import {
   MatButtonModule,
   MatToolbarModule,
   MatExpansionModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 import { HeaderComponent } from './header/header.component';
@@ -39,6 +41,8 @@ import { AppRoutingModule } from './app-routing.module';
     MatToolbarModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
     HttpClientModule
   ],
   providers: [],
